@@ -30,6 +30,11 @@ const en = {
   myWorkAlt: 'My coloring',
   confirmYes: 'Yes',
   confirmNo: 'No',
+  frame1: 'Frame 1',
+  frame2: 'Frame 2',
+  copyColors: 'Copy colors from frame 1',
+  continueWork: 'Continue',
+  newWork: 'New',
 };
 
 export type MessageKey = keyof typeof en;
@@ -61,6 +66,11 @@ const dictionaries: Record<string, Partial<Record<MessageKey, string>>> = {
     myWorkAlt: 'Моя раскраска',
     confirmYes: 'Да',
     confirmNo: 'Нет',
+    frame1: 'Кадр 1',
+    frame2: 'Кадр 2',
+    copyColors: 'Скопировать цвета с кадра 1',
+    continueWork: 'Продолжить',
+    newWork: 'Новая',
   },
   de: {
     home: 'Zurück zur Galerie',
@@ -87,6 +97,11 @@ const dictionaries: Record<string, Partial<Record<MessageKey, string>>> = {
     myWorkAlt: 'Mein Ausmalbild',
     confirmYes: 'Ja',
     confirmNo: 'Nein',
+    frame1: 'Bild 1',
+    frame2: 'Bild 2',
+    copyColors: 'Farben von Bild 1 kopieren',
+    continueWork: 'Weiter',
+    newWork: 'Neu',
   },
 };
 

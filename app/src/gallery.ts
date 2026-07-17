@@ -1,9 +1,12 @@
 import { loadCatalog, imageUrl, imageFiles, allTags, CatalogImage } from './catalog';
-import { getAllWorks, deleteWork } from './store';
+import { getAllWorks, deleteWork, Work } from './store';
 import { isFullyCached, downloadUrls } from './offlineCache';
 import { t } from './i18n';
 
 type Filter = 'all' | 'mine' | string;
+
+/** Navigate to the editor: with a workId to resume that work, without to start a new one. */
+export type NavigateFn = (imageId: string, workId?: string) => void;
 
 function matchesQuery(img: CatalogImage, query: string): boolean {
   // Tags from ALL languages are searched, so a Russian parent typing "кот"
@@ -13,7 +16,7 @@ function matchesQuery(img: CatalogImage, query: string): boolean {
 }
 
 /** Mounts the gallery (home) screen. Returns a dispose function. */
-export async function mountGallery(root: HTMLElement, navigate: (imageId: string) => void): Promise<() => void> {
+export async function mountGallery(root: HTMLElement, navigate: NavigateFn): Promise<() => void> {
   root.innerHTML = `
     <div class="gallery">
       <div class="gallery-topbar">
@@ -129,7 +132,7 @@ export async function mountGallery(root: HTMLElement, navigate: (imageId: string
 
   function renderChips() {
     chipsRow.innerHTML = '';
-    addChip('all', '⭐', downloadUrlsFor(catalog.images));
+    addChip('all', '🌈', downloadUrlsFor(catalog.images));
     catalog.categories.forEach((c) =>
       addChip(
         c.id,
@@ -140,19 +143,75 @@ export async function mountGallery(root: HTMLElement, navigate: (imageId: string
     addChip('mine', '🎨', null);
   }
 
-  function renderCatalogCard(imgMeta: CatalogImage) {
+  function trackObjectUrl(blob: Blob): string {
+    const url = URL.createObjectURL(blob);
+    objectUrls.push(url);
+    return url;
+  }
+
+  /**
+   * A catalog card. When the image already has saved works, it shows the
+   * latest work's colored thumbnail plus a 🖌️ badge, and tapping asks
+   * whether to continue that work or start a fresh one.
+   */
+  function renderCatalogCard(imgMeta: CatalogImage, latestWork: Work | undefined) {
     const card = document.createElement('div');
     card.className = 'card';
     const img = document.createElement('img');
-    img.src = imageUrl(imgMeta.file);
+    if (latestWork) {
+      img.src = trackObjectUrl(latestWork.thumbBlob);
+      const badge = document.createElement('span');
+      badge.className = 'card-colored-badge';
+      badge.textContent = '🖌️';
+      card.appendChild(badge);
+    } else {
+      img.src = imageUrl(imgMeta.file);
+      img.loading = 'lazy';
+    }
     img.alt = imgMeta.title;
-    img.loading = 'lazy';
-    card.appendChild(img);
-    card.addEventListener('click', () => navigate(imgMeta.id));
+    card.prepend(img);
+    card.addEventListener('click', () => {
+      if (latestWork) chooseContinueOrNew(imgMeta.id, latestWork);
+      else navigate(imgMeta.id);
+    });
     grid.appendChild(card);
   }
 
-  function confirmDelete(imageId: string) {
+  /** ▶️ continue the latest work (thumbnail shown inside the button) or ✨ start fresh. */
+  function chooseContinueOrNew(imageId: string, latestWork: Work) {
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    overlay.innerHTML = `
+      <div class="dialog">
+        <div class="dialog-actions">
+          <button class="btn choice" data-a="continue" title="${t('continueWork')}">
+            <img class="dialog-thumb" alt="" /><span class="choice-emoji">▶️</span>
+          </button>
+          <button class="btn choice" data-a="new" title="${t('newWork')}"><span class="choice-emoji">✨</span></button>
+        </div>
+      </div>
+    `;
+    const thumbUrl = URL.createObjectURL(latestWork.thumbBlob);
+    (overlay.querySelector('.dialog-thumb') as HTMLImageElement).src = thumbUrl;
+    const close = () => {
+      URL.revokeObjectURL(thumbUrl);
+      overlay.remove();
+    };
+    overlay.addEventListener('click', (ev) => {
+      if (ev.target === overlay) close(); // tap outside = cancel
+    });
+    (overlay.querySelector('[data-a="continue"]') as HTMLButtonElement).addEventListener('click', () => {
+      close();
+      navigate(imageId, latestWork.workId);
+    });
+    (overlay.querySelector('[data-a="new"]') as HTMLButtonElement).addEventListener('click', () => {
+      close();
+      navigate(imageId);
+    });
+    el.appendChild(overlay);
+  }
+
+  function confirmDelete(workId: string) {
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
     overlay.innerHTML = `
@@ -166,7 +225,7 @@ export async function mountGallery(root: HTMLElement, navigate: (imageId: string
     `;
     (overlay.querySelector('[data-a="no"]') as HTMLButtonElement).addEventListener('click', () => overlay.remove());
     (overlay.querySelector('[data-a="yes"]') as HTMLButtonElement).addEventListener('click', () => {
-      void deleteWork(imageId).then(() => {
+      void deleteWork(workId).then(() => {
         overlay.remove();
         void renderGrid();
       });
@@ -174,9 +233,19 @@ export async function mountGallery(root: HTMLElement, navigate: (imageId: string
     el.appendChild(overlay);
   }
 
+  function renderCatalogCards(images: CatalogImage[], works: Work[]) {
+    // getAllWorks is sorted newest-first, so the first hit per image is the latest.
+    const latestByImage = new Map<string, Work>();
+    for (const work of works) {
+      if (!latestByImage.has(work.imageId)) latestByImage.set(work.imageId, work);
+    }
+    images.forEach((imgMeta) => renderCatalogCard(imgMeta, latestByImage.get(imgMeta.id)));
+  }
+
   async function renderGrid() {
     revokeObjectUrls();
     grid.innerHTML = '';
+    const works = await getAllWorks();
 
     const query = searchOpen ? searchQuery.trim() : '';
     if (query) {
@@ -185,12 +254,11 @@ export async function mountGallery(root: HTMLElement, navigate: (imageId: string
         grid.innerHTML = '<div class="gallery-empty">🤷</div>';
         return;
       }
-      results.forEach(renderCatalogCard);
+      renderCatalogCards(results, works);
       return;
     }
 
     if (activeFilter === 'mine') {
-      const works = await getAllWorks();
       if (works.length === 0) {
         grid.innerHTML = '<div class="gallery-empty">🖼️</div>';
         return;
@@ -199,9 +267,7 @@ export async function mountGallery(root: HTMLElement, navigate: (imageId: string
         const card = document.createElement('div');
         card.className = 'card';
         const img = document.createElement('img');
-        const url = URL.createObjectURL(work.thumbBlob);
-        objectUrls.push(url);
-        img.src = url;
+        img.src = trackObjectUrl(work.thumbBlob);
         img.alt = t('myWorkAlt');
         card.appendChild(img);
 
@@ -211,11 +277,11 @@ export async function mountGallery(root: HTMLElement, navigate: (imageId: string
         del.title = t('deleteWork');
         del.addEventListener('click', (ev) => {
           ev.stopPropagation();
-          confirmDelete(work.imageId);
+          confirmDelete(work.workId);
         });
         card.appendChild(del);
 
-        card.addEventListener('click', () => navigate(work.imageId));
+        card.addEventListener('click', () => navigate(work.imageId, work.workId));
         grid.appendChild(card);
       }
       return;
@@ -227,7 +293,7 @@ export async function mountGallery(root: HTMLElement, navigate: (imageId: string
       grid.innerHTML = '<div class="gallery-empty">🤷</div>';
       return;
     }
-    images.forEach(renderCatalogCard);
+    renderCatalogCards(images, works);
   }
 
   renderChips();

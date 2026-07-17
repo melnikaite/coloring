@@ -9,17 +9,21 @@ let routeToken = 0;
 async function route() {
   const myToken = ++routeToken;
   const hash = location.hash || '#/';
-  const paintMatch = hash.match(/^#\/paint\/(.+)$/);
+  // #/paint/<imageId>            -> start a NEW work
+  // #/paint/<imageId>?w=<workId> -> resume that specific work
+  const paintMatch = hash.match(/^#\/paint\/([^?]+)(?:\?w=([^&]+))?$/);
 
   let dispose: () => void;
   if (paintMatch) {
     const imageId = decodeURIComponent(paintMatch[1]);
-    dispose = await mountEditor(app, imageId, () => {
+    const workId = paintMatch[2] ? decodeURIComponent(paintMatch[2]) : null;
+    dispose = await mountEditor(app, imageId, workId, () => {
       location.hash = '#/';
     });
   } else {
-    dispose = await mountGallery(app, (imageId) => {
-      location.hash = `#/paint/${encodeURIComponent(imageId)}`;
+    dispose = await mountGallery(app, (imageId, workId) => {
+      const suffix = workId ? `?w=${encodeURIComponent(workId)}` : '';
+      location.hash = `#/paint/${encodeURIComponent(imageId)}${suffix}`;
     });
   }
 

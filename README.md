@@ -134,6 +134,13 @@ Frame 2 is written as `<id>.f2.svg` next to frame 1 and recorded in the catalog'
 `frames` array. If the movement came out ugly or misaligned, re-roll:
 `uv run gen animate --id dragon-book --force`.
 
+Two-frame pictures can also be **colored per frame**: a 1️⃣/2️⃣ switcher appears in
+the editor's top bar. The first switch to frame 2 starts from an automatic copy of
+frame 1's colors, so the child only touches up the moved part - erase the stain at
+the old spot, fill the region at the new one (📋 re-copies frame 1's colors later,
+with a confirm). The celebrate animation and GIF then play each frame with its own
+coloring; until frame 2 is touched, both frames share frame 1's paint as before.
+
 ## Languages
 
 Three places know about languages:

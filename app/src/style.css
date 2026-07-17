@@ -245,6 +245,23 @@ button {
   touch-action: manipulation;
 }
 
+.card-colored-badge {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  pointer-events: none;
+}
+
 .gallery-empty {
   grid-column: 1 / -1;
   text-align: center;
@@ -284,6 +301,27 @@ button {
   font-size: 30px;
   min-width: 64px;
   min-height: 64px;
+}
+/* Continue-or-new choice: big buttons, ▶️ carries the latest work's thumbnail. */
+.dialog-actions .btn.choice {
+  position: relative;
+  min-width: 96px;
+  min-height: 96px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.dialog-thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.choice-emoji {
+  position: relative;
+  z-index: 1;
+  font-size: 34px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 /* ---------- Editor screen ---------- */

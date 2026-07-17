@@ -35,8 +35,13 @@ function frameDelayMs(source: CelebrateSource): number {
 export interface CelebrateSource {
   width: number;
   height: number;
-  /** The user's paint layer - stays perfectly static throughout the celebration. */
-  paintCanvas: HTMLCanvasElement;
+  /**
+   * The user's paint layer(s), parallel to `lineLayers`. With a single entry
+   * that paint is used for every frame (classic shared coloring). When the
+   * child painted frame 2 separately, pass both - frame i then renders
+   * paintLayers[i] under lineLayers[i].
+   */
+  paintLayers: HTMLCanvasElement[];
   /**
    * The line-art layer(s). With a single canvas (`[lineCanvas]`) the boil
    * effect synthesizes 3 warped variants from it at 8fps. When the catalog
@@ -47,6 +52,16 @@ export interface CelebrateSource {
   lineLayers: HTMLCanvasElement[];
   /** Used for the exported file name. */
   imageId: string;
+}
+
+/**
+ * The paint layer to composite under line frame `frameIndex`. Falls back to
+ * the first (frame 1) paint when no dedicated layer exists - including for
+ * synthetic boil frames, which all derive from line frame 0.
+ */
+function paintFor(source: CelebrateSource, frameIndex: number): HTMLCanvasElement {
+  if (source.lineLayers.length <= 1) return source.paintLayers[0];
+  return source.paintLayers[frameIndex] ?? source.paintLayers[0];
 }
 
 interface Particle {
@@ -175,7 +190,7 @@ async function exportPng(source: CelebrateSource, boilFrames: HTMLCanvasElement[
   c.width = source.width;
   c.height = source.height;
   const ctx = c.getContext('2d')!;
-  drawStaticPlusLine(ctx, source.width, source.height, source.paintCanvas, boilFrames[0]);
+  drawStaticPlusLine(ctx, source.width, source.height, paintFor(source, 0), boilFrames[0]);
   const blob = await canvasToBlob(c, 'image/png');
   await shareOrDownload(blob, `${source.imageId}.png`, 'image/png');
 }
@@ -191,11 +206,12 @@ async function exportGif(source: CelebrateSource, boilFrames: HTMLCanvasElement[
   const frameCtx = frameCanvas.getContext('2d', { willReadFrequently: true })!;
 
   const gif = GIFEncoder();
-  for (const lineFrame of boilFrames) {
+  for (let i = 0; i < boilFrames.length; i++) {
+    const lineFrame = boilFrames[i];
     frameCtx.clearRect(0, 0, outW, outH);
     frameCtx.fillStyle = '#ffffff';
     frameCtx.fillRect(0, 0, outW, outH);
-    frameCtx.drawImage(source.paintCanvas, 0, 0, source.width, source.height, 0, 0, outW, outH);
+    frameCtx.drawImage(paintFor(source, i), 0, 0, source.width, source.height, 0, 0, outW, outH);
     frameCtx.drawImage(lineFrame, 0, 0, source.width, source.height, 0, 0, outW, outH);
     const { data } = frameCtx.getImageData(0, 0, outW, outH);
     const palette = quantize(data, 256);
@@ -256,7 +272,7 @@ export function showCelebration(container: HTMLElement, source: CelebrateSource,
   let lastBoilSwitch = performance.now();
 
   function drawArt() {
-    drawStaticPlusLine(artCtx, source.width, source.height, source.paintCanvas, boilFrames[boilIndex]);
+    drawStaticPlusLine(artCtx, source.width, source.height, paintFor(source, boilIndex), boilFrames[boilIndex]);
   }
   drawArt();
 

@@ -1,11 +1,22 @@
 /** IndexedDB persistence for saved colorings ("My works"). */
 
 export interface Work {
-  workId: string; // currently always === imageId (one work per image)
+  /**
+   * Unique id of this coloring session. New works get `<imageId>-<random>`;
+   * legacy records (one work per image) used workId === imageId and keep
+   * working unchanged - they're just works like any other.
+   */
+  workId: string;
   imageId: string;
   updatedAt: number;
-  paintBlob: Blob; // full-resolution PNG of the paint layer
-  thumbBlob: Blob; // 256px composite PNG for gallery thumbnails
+  paintBlob: Blob; // full-resolution PNG of the (frame 1) paint layer
+  /**
+   * Frame 2's paint layer for two-frame images, present only once the child
+   * has visited/painted frame 2. Optional and not part of any index, so old
+   * records need no migration.
+   */
+  paintBlob2?: Blob;
+  thumbBlob: Blob; // 256px composite PNG for gallery thumbnails (frame 1)
 }
 
 const DB_NAME = 'coloriki';
@@ -24,7 +35,17 @@ function openDb(): Promise<IDBDatabase> {
         db.createObjectStore(STORE, { keyPath: 'workId' });
       }
     };
-    req.onsuccess = () => resolve(req.result);
+    req.onsuccess = () => {
+      const db = req.result;
+      // If another tab/version ever needs to upgrade or delete the DB, close
+      // our connection instead of deadlocking it (old tabs in the back/forward
+      // cache would otherwise block the request forever).
+      db.onversionchange = () => {
+        db.close();
+        dbPromise = null;
+      };
+      resolve(db);
+    };
     req.onerror = () => reject(req.error);
   });
   return dbPromise;
@@ -40,16 +61,17 @@ export async function saveWork(work: Work): Promise<void> {
   });
 }
 
-export async function getWork(imageId: string): Promise<Work | undefined> {
+export async function getWork(workId: string): Promise<Work | undefined> {
   const db = await openDb();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE, 'readonly');
-    const req = tx.objectStore(STORE).get(imageId);
+    const req = tx.objectStore(STORE).get(workId);
     req.onsuccess = () => resolve(req.result as Work | undefined);
     req.onerror = () => reject(req.error);
   });
 }
 
+/** All works, most recently updated first. */
 export async function getAllWorks(): Promise<Work[]> {
   const db = await openDb();
   return new Promise((resolve, reject) => {
@@ -60,11 +82,16 @@ export async function getAllWorks(): Promise<Work[]> {
   });
 }
 
-export async function deleteWork(imageId: string): Promise<void> {
+/** All works for one image, most recently updated first. Full-scan filter - fine at this scale. */
+export async function getWorksForImage(imageId: string): Promise<Work[]> {
+  return (await getAllWorks()).filter((w) => w.imageId === imageId);
+}
+
+export async function deleteWork(workId: string): Promise<void> {
   const db = await openDb();
   await new Promise<void>((resolve, reject) => {
     const tx = db.transaction(STORE, 'readwrite');
-    tx.objectStore(STORE).delete(imageId);
+    tx.objectStore(STORE).delete(workId);
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(tx.error);
   });

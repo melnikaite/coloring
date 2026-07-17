@@ -3,7 +3,7 @@ import { rasterizeSvg } from './engine/raster';
 import { findNearestFree, RegionCache, Region } from './engine/floodfill';
 import { StrokeDrawer, PALETTE, BRUSH_SIZES, MARKER_ALPHA, MASK_DILATE_RADIUS, ToolId, ModeId, SizeId, Point } from './engine/tools';
 import { HistoryStack } from './engine/history';
-import { getWork, saveWork } from './store';
+import { getWork, saveWork, Work } from './store';
 import { showCelebration } from './celebrate';
 import { t, MessageKey } from './i18n';
 
@@ -41,8 +41,17 @@ async function drawBlobToCanvas(blob: Blob, ctx: CanvasRenderingContext2D, w: nu
   ctx.drawImage(bitmap, 0, 0, w, h);
 }
 
-/** Mounts the paint editor screen. Returns a dispose function the router must call before unmounting. */
-export async function mountEditor(root: HTMLElement, imageId: string, goBack: () => void): Promise<() => void> {
+/**
+ * Mounts the paint editor screen. `requestedWorkId` selects which saved work
+ * to resume; null starts a brand-new blank work. Returns a dispose function
+ * the router must call before unmounting.
+ */
+export async function mountEditor(
+  root: HTMLElement,
+  imageId: string,
+  requestedWorkId: string | null,
+  goBack: () => void
+): Promise<() => void> {
   root.innerHTML = '<div class="editor" style="display:flex;align-items:center;justify-content:center;font-size:56px;">⏳</div>';
 
   const catalog = await loadCatalog();
@@ -52,23 +61,63 @@ export async function mountEditor(root: HTMLElement, imageId: string, goBack: ()
     return () => {};
   }
 
-  // Frame 0 (= meta.file) is the single source of truth for painting: the
-  // barrier map, region masks and the line layer composited while drawing
-  // all come from it. Extra frames (optional micro-movement line art, e.g.
-  // a blink) are rasterized up-front too but used only for the celebrate
-  // animation and GIF export.
+  const workId = requestedWorkId ?? `${imageId}-${crypto.randomUUID()}`;
+  if (!requestedWorkId) {
+    // Pin the new work's id into the URL (no hashchange fires for
+    // replaceState) so a mid-painting reload resumes THIS work instead of
+    // forking yet another blank one. Back/forward keep working normally.
+    window.history.replaceState(null, '', `#/paint/${encodeURIComponent(imageId)}?w=${encodeURIComponent(workId)}`);
+  }
+
+  // Frame 0 (= meta.file) is the primary drawing. Two-frame images get a
+  // second, independently paintable frame: its own paint canvas, history,
+  // barrier map and region cache built from frame 2's line raster (regions
+  // differ where the body part moved). Single-frame images are unchanged.
   const frameFiles = imageFiles(meta);
   const raster = await rasterizeSvg(imageUrl(frameFiles[0]));
-  const { width: W, height: H, lineCanvas, barrier } = raster;
+  const { width: W, height: H } = raster;
 
-  const lineLayers: HTMLCanvasElement[] = [lineCanvas];
+  interface PaintFrame {
+    lineCanvas: HTMLCanvasElement;
+    barrier: Uint8Array;
+    paintCanvas: HTMLCanvasElement;
+    paintCtx: CanvasRenderingContext2D;
+    history: HistoryStack;
+    regionCache: RegionCache;
+    /** True once the paint canvas has a meaningful state (restored or auto-copied) and history is seeded. */
+    initialized: boolean;
+  }
+
+  function makePaintFrame(frameLineCanvas: HTMLCanvasElement, frameBarrier: Uint8Array): PaintFrame {
+    const canvas = document.createElement('canvas');
+    canvas.width = W;
+    canvas.height = H;
+    return {
+      lineCanvas: frameLineCanvas,
+      barrier: frameBarrier,
+      paintCanvas: canvas,
+      paintCtx: canvas.getContext('2d', { willReadFrequently: true })!,
+      history: new HistoryStack(25),
+      regionCache: new RegionCache(frameBarrier, W, H, MASK_DILATE_RADIUS),
+      initialized: false,
+    };
+  }
+
+  const paintFrames: PaintFrame[] = [makePaintFrame(raster.lineCanvas, raster.barrier)];
+  const lineLayers: HTMLCanvasElement[] = [raster.lineCanvas];
   for (const frameFile of frameFiles.slice(1)) {
     try {
       const frameRaster = await rasterizeSvg(imageUrl(frameFile));
       if (frameRaster.width === W && frameRaster.height === H) {
         lineLayers.push(frameRaster.lineCanvas);
+        // Per-frame painting supports exactly two frames; further frames
+        // (none exist in the catalog today) stay celebrate-only.
+        if (paintFrames.length < 2) {
+          paintFrames.push(makePaintFrame(frameRaster.lineCanvas, frameRaster.barrier));
+        }
       } else {
-        // Mismatched viewBox - rescale the frame onto the working resolution.
+        // Mismatched viewBox - rescale for celebrate, but painting on this
+        // frame is unsupported (its barrier map wouldn't align).
         const scaled = document.createElement('canvas');
         scaled.width = W;
         scaled.height = H;
@@ -79,29 +128,42 @@ export async function mountEditor(root: HTMLElement, imageId: string, goBack: ()
       // A missing/broken extra frame must never block painting - skip it.
     }
   }
-
-  const paintCanvas = document.createElement('canvas');
-  paintCanvas.width = W;
-  paintCanvas.height = H;
-  const paintCtx = paintCanvas.getContext('2d', { willReadFrequently: true })!;
+  const multiPaint = paintFrames.length > 1;
 
   const scratchCanvas = document.createElement('canvas');
   scratchCanvas.width = W;
   scratchCanvas.height = H;
   const scratchCtx = scratchCanvas.getContext('2d')!;
 
-  const existing = await getWork(imageId);
+  const existing = requestedWorkId ? await getWork(requestedWorkId) : undefined;
   if (existing) {
     try {
-      await drawBlobToCanvas(existing.paintBlob, paintCtx, W, H);
+      await drawBlobToCanvas(existing.paintBlob, paintFrames[0].paintCtx, W, H);
     } catch {
       // corrupt/old save - start blank
     }
   }
+  paintFrames[0].history.init(await canvasToBlob(paintFrames[0].paintCanvas));
+  paintFrames[0].initialized = true;
+  if (multiPaint && existing?.paintBlob2) {
+    try {
+      await drawBlobToCanvas(existing.paintBlob2, paintFrames[1].paintCtx, W, H);
+      paintFrames[1].history.init(await canvasToBlob(paintFrames[1].paintCanvas));
+      paintFrames[1].initialized = true;
+    } catch {
+      // corrupt frame-2 save - it will be auto-copied from frame 1 on first switch
+    }
+  }
 
-  const regionCache = new RegionCache(barrier, W, H, MASK_DILATE_RADIUS);
-  const history = new HistoryStack(25);
-  history.init(await canvasToBlob(paintCanvas));
+  // Mutable aliases for the ACTIVE frame - every stroke/fill/undo/render
+  // path below reads these, so switching frames is a plain reassignment.
+  let activeFrame: 0 | 1 = 0;
+  let paintCanvas = paintFrames[0].paintCanvas;
+  let paintCtx = paintFrames[0].paintCtx;
+  let history = paintFrames[0].history;
+  let regionCache = paintFrames[0].regionCache;
+  let barrier = paintFrames[0].barrier;
+  let activeLineCanvas = paintFrames[0].lineCanvas;
 
   root.innerHTML = `
     <div class="editor">
@@ -114,6 +176,8 @@ export async function mountEditor(root: HTMLElement, imageId: string, goBack: ()
         <div class="group">
           <button class="btn round" data-action="undo" title="${t('undo')}" disabled>🔙</button>
           <button class="btn round" data-action="redo" title="${t('redo')}" disabled>🔜</button>
+          <button class="btn round" data-action="frame" hidden>2️⃣</button>
+          <button class="btn round" data-action="copyframe" title="${t('copyColors')}" hidden>📋</button>
           <button class="btn round" data-action="celebrate" title="${t('celebrate')}">🎉</button>
           <button class="btn round" data-action="export" title="${t('shareImage')}">📤</button>
         </div>
@@ -134,6 +198,8 @@ export async function mountEditor(root: HTMLElement, imageId: string, goBack: ()
   const redoBtn = el.querySelector('[data-action="redo"]') as HTMLButtonElement;
   const exportBtn = el.querySelector('[data-action="export"]') as HTMLButtonElement;
   const celebrateBtn = el.querySelector('[data-action="celebrate"]') as HTMLButtonElement;
+  const frameBtn = el.querySelector('[data-action="frame"]') as HTMLButtonElement;
+  const copyFrameBtn = el.querySelector('[data-action="copyframe"]') as HTMLButtonElement;
   const toolsRow = el.querySelector('[data-role="tools"]') as HTMLElement;
   const paletteRow = el.querySelector('[data-role="palette"]') as HTMLElement;
 
@@ -241,11 +307,13 @@ export async function mountEditor(root: HTMLElement, imageId: string, goBack: ()
     const dh = H * s;
     const dx = (sizePx - dw) / 2;
     const dy = (sizePx - dh) / 2;
-    cctx.drawImage(paintCanvas, 0, 0, W, H, dx, dy, dw, dh);
-    cctx.drawImage(lineCanvas, 0, 0, W, H, dx, dy, dw, dh);
+    // Thumbnail is always frame-1-based, regardless of the active frame.
+    cctx.drawImage(paintFrames[0].paintCanvas, 0, 0, W, H, dx, dy, dw, dh);
+    cctx.drawImage(paintFrames[0].lineCanvas, 0, 0, W, H, dx, dy, dw, dh);
     return canvasToBlob(c);
   }
   function compositeFullCanvas(): HTMLCanvasElement {
+    // Exports the ACTIVE frame (what the child currently sees).
     const c = document.createElement('canvas');
     c.width = W;
     c.height = H;
@@ -253,15 +321,22 @@ export async function mountEditor(root: HTMLElement, imageId: string, goBack: ()
     cctx.fillStyle = '#fff';
     cctx.fillRect(0, 0, W, H);
     cctx.drawImage(paintCanvas, 0, 0);
-    cctx.drawImage(lineCanvas, 0, 0);
+    cctx.drawImage(activeLineCanvas, 0, 0);
     return c;
   }
   async function compositeFull(): Promise<Blob> {
     return canvasToBlob(compositeFullCanvas());
   }
   async function doAutosave() {
-    const [paintBlob, thumbBlob] = await Promise.all([canvasToBlob(paintCanvas), compositeThumb(256)]);
-    await saveWork({ workId: imageId, imageId, updatedAt: Date.now(), paintBlob, thumbBlob });
+    const [paintBlob, thumbBlob] = await Promise.all([
+      canvasToBlob(paintFrames[0].paintCanvas),
+      compositeThumb(256),
+    ]);
+    const work: Work = { workId, imageId, updatedAt: Date.now(), paintBlob, thumbBlob };
+    if (multiPaint && paintFrames[1].initialized) {
+      work.paintBlob2 = await canvasToBlob(paintFrames[1].paintCanvas);
+    }
+    await saveWork(work);
   }
   async function flushAutosave() {
     if (autosaveTimer) {
@@ -366,7 +441,7 @@ export async function mountEditor(root: HTMLElement, imageId: string, goBack: ()
         }
         ctx.restore();
       }
-      ctx.drawImage(lineCanvas, 0, 0);
+      ctx.drawImage(activeLineCanvas, 0, 0);
       resetViewBtn.hidden = zoom === 1 && pan.x === 0 && pan.y === 0;
       dirty = false;
     }
@@ -408,10 +483,13 @@ export async function mountEditor(root: HTMLElement, imageId: string, goBack: ()
   // commit order even if encodes resolve at different speeds.
   let snapshotChain: Promise<void> = Promise.resolve();
   function snapshotToHistory() {
+    // Capture the ACTIVE frame's history now - the user may switch frames
+    // before the encode resolves, and the snapshot belongs to this frame.
+    const targetHistory = history;
     const blobPromise = canvasToBlob(paintCanvas);
     snapshotChain = snapshotChain
       .then(async () => {
-        history.push(await blobPromise);
+        targetHistory.push(await blobPromise);
         updateUndoRedoButtons();
       })
       .catch(() => {
@@ -421,14 +499,18 @@ export async function mountEditor(root: HTMLElement, imageId: string, goBack: ()
 
   async function restoreFromHistory(direction: 'undo' | 'redo') {
     if (restoreInFlight) return;
-    const blob = direction === 'undo' ? history.undo() : history.redo();
+    // Capture the active frame's history + context: frame switches are
+    // blocked while restoreInFlight, but be defensive anyway.
+    const targetHistory = history;
+    const targetCtx = paintCtx;
+    const blob = direction === 'undo' ? targetHistory.undo() : targetHistory.redo();
     if (!blob) return;
     restoreInFlight = true;
     updateUndoRedoButtons();
     try {
       const bitmap = await createImageBitmap(blob);
-      paintCtx.clearRect(0, 0, W, H);
-      paintCtx.drawImage(bitmap, 0, 0, W, H);
+      targetCtx.clearRect(0, 0, W, H);
+      targetCtx.drawImage(bitmap, 0, 0, W, H);
     } finally {
       restoreInFlight = false;
     }
@@ -520,14 +602,93 @@ export async function mountEditor(root: HTMLElement, imageId: string, goBack: ()
   let dismissCelebration: (() => void) | null = null;
   celebrateBtn.addEventListener('click', () => {
     dismissCelebration?.();
+    // Frame 2's own coloring is included only once it exists; otherwise all
+    // frames share frame 1's paint (classic behavior).
+    const paintLayers =
+      multiPaint && paintFrames[1].initialized
+        ? [paintFrames[0].paintCanvas, paintFrames[1].paintCanvas]
+        : [paintFrames[0].paintCanvas];
     dismissCelebration = showCelebration(
       el,
-      { width: W, height: H, paintCanvas, lineLayers, imageId },
+      { width: W, height: H, paintLayers, lineLayers, imageId },
       () => {
         dismissCelebration = null;
       }
     );
   });
+
+  // ---------------- Per-frame painting (two-frame images) ----------------
+  function updateFrameButtons() {
+    frameBtn.hidden = !multiPaint;
+    copyFrameBtn.hidden = !multiPaint || activeFrame !== 1;
+    if (!multiPaint) return;
+    // The button shows the frame you'd switch TO.
+    frameBtn.textContent = activeFrame === 0 ? '2️⃣' : '1️⃣';
+    frameBtn.title = t(activeFrame === 0 ? 'frame2' : 'frame1');
+  }
+
+  async function setActiveFrame(index: 0 | 1) {
+    if (!multiPaint || index === activeFrame || restoreInFlight) return;
+    cancelActiveStroke();
+    const frame = paintFrames[index];
+    if (!frame.initialized) {
+      // First visit to frame 2: start from a copy of frame 1's colors so the
+      // child only has to fix the moved part, not recolor everything.
+      frame.paintCtx.drawImage(paintFrames[0].paintCanvas, 0, 0);
+      frame.history.init(await canvasToBlob(frame.paintCanvas));
+      frame.initialized = true;
+      scheduleAutosave();
+    }
+    activeFrame = index;
+    paintCanvas = frame.paintCanvas;
+    paintCtx = frame.paintCtx;
+    history = frame.history;
+    regionCache = frame.regionCache;
+    barrier = frame.barrier;
+    activeLineCanvas = frame.lineCanvas;
+    updateFrameButtons();
+    updateUndoRedoButtons();
+    dirty = true; // zoom/pan intentionally preserved
+  }
+
+  frameBtn.addEventListener('click', () => {
+    void setActiveFrame(activeFrame === 0 ? 1 : 0);
+  });
+
+  copyFrameBtn.addEventListener('click', () => {
+    if (activeFrame !== 1) return;
+    confirmAction('📋❓', () => {
+      // Replace frame 2's paint with frame 1's current colors. Pushed to
+      // history, so it's still undoable despite the confirm.
+      paintCtx.clearRect(0, 0, W, H);
+      paintCtx.drawImage(paintFrames[0].paintCanvas, 0, 0);
+      snapshotToHistory();
+      scheduleAutosave();
+      dirty = true;
+    });
+  });
+
+  function confirmAction(emoji: string, onYes: () => void) {
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    overlay.innerHTML = `
+      <div class="dialog">
+        <div class="dialog-emoji">${emoji}</div>
+        <div class="dialog-actions">
+          <button class="btn round" data-a="no" title="${t('confirmNo')}">❌</button>
+          <button class="btn round" data-a="yes" title="${t('confirmYes')}">✅</button>
+        </div>
+      </div>
+    `;
+    (overlay.querySelector('[data-a="no"]') as HTMLButtonElement).addEventListener('click', () => overlay.remove());
+    (overlay.querySelector('[data-a="yes"]') as HTMLButtonElement).addEventListener('click', () => {
+      overlay.remove();
+      onYes();
+    });
+    el.appendChild(overlay);
+  }
+
+  updateFrameButtons();
 
   function showExportFlash() {
     const span = document.createElement('div');
