@@ -6,7 +6,10 @@
   --card-bg: #ffffff;
   --shadow: 0 6px 16px rgba(43, 45, 66, 0.15);
   --radius: 20px;
-  color-scheme: light;
+  /* "only light" opts out of Android Chrome's forced Auto Dark Theme, which
+     would invert the white "paper" and make black line art unreadable. The
+     app's own dark styles below still apply. */
+  color-scheme: only light;
 }
 
 * {
@@ -203,20 +206,25 @@ button {
 
 .card {
   position: relative;
-  aspect-ratio: 1 / 1;
   background: var(--card-bg);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
   touch-action: manipulation;
 }
+/* Square cards via the padding hack instead of aspect-ratio: some mobile
+   browsers ship without aspect-ratio support and collapse the whole grid
+   into thin clipped strips. */
+.card::before {
+  content: '';
+  display: block;
+  padding-top: 100%;
+}
 .card img {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 10px;
+  width: calc(100% - 20px);
+  height: calc(100% - 20px);
   object-fit: contain;
   pointer-events: none;
   /* Coloring pages are "paper": always white, even in dark mode, or black
