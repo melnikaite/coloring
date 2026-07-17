@@ -8,8 +8,16 @@
  */
 export const IMAGES_CACHE_NAME = 'coloriki-v1-images';
 
-function hasCacheApi(): boolean {
+/**
+ * Cache API is secure-context-only: absent over plain http (LAN testing).
+ * The gallery hides download buttons entirely when it's unavailable.
+ */
+export function offlineDownloadsAvailable(): boolean {
   return typeof caches !== 'undefined';
+}
+
+function hasCacheApi(): boolean {
+  return offlineDownloadsAvailable();
 }
 
 /** True if every url is already present in the images cache. */

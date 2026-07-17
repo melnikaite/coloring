@@ -1,6 +1,6 @@
 import { loadCatalog, imageUrl, imageFiles, allTags, CatalogImage } from './catalog';
 import { getAllWorks, deleteWork, Work } from './store';
-import { isFullyCached, downloadUrls } from './offlineCache';
+import { isFullyCached, downloadUrls, offlineDownloadsAvailable } from './offlineCache';
 import { t } from './i18n';
 
 type Filter = 'all' | 'mine' | string;
@@ -93,7 +93,7 @@ export async function mountGallery(root: HTMLElement, navigate: NavigateFn): Pro
     });
     chipsRow.appendChild(chip);
 
-    if (urls && urls.length > 0) {
+    if (urls && urls.length > 0 && offlineDownloadsAvailable()) {
       const progress = document.createElement('span');
       progress.className = 'chip-progress';
       chip.appendChild(progress);

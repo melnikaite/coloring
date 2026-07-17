@@ -29,6 +29,20 @@ function hexToRgb(hex: string): [number, number, number] {
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 }
 
+/**
+ * Unique suffix for new work ids. crypto.randomUUID is secure-context-only,
+ * so over plain http (e.g. LAN testing on a phone) fall back to
+ * getRandomValues — opening a picture must never crash on it.
+ */
+function randomWorkSuffix(): string {
+  const c = globalThis.crypto as Crypto | undefined;
+  if (c?.randomUUID) return c.randomUUID();
+  const bytes = new Uint8Array(16);
+  if (c?.getRandomValues) c.getRandomValues(bytes);
+  else for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+}
+
 function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
   return new Promise((resolve, reject) => {
     canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), 'image/png');
@@ -61,7 +75,7 @@ export async function mountEditor(
     return () => {};
   }
 
-  const workId = requestedWorkId ?? `${imageId}-${crypto.randomUUID()}`;
+  const workId = requestedWorkId ?? `${imageId}-${randomWorkSuffix()}`;
   if (!requestedWorkId) {
     // Pin the new work's id into the URL (no hashchange fires for
     // replaceState) so a mid-painting reload resumes THIS work instead of
