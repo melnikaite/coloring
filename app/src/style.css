@@ -1,0 +1,457 @@
+:root {
+  --bg: #fef6e4;
+  --accent: #ff6b6b;
+  --accent-2: #4ecdc4;
+  --ink: #2b2d42;
+  --card-bg: #ffffff;
+  --shadow: 0 6px 16px rgba(43, 45, 66, 0.15);
+  --radius: 20px;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  user-select: none;
+}
+
+#app {
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
+}
+
+button {
+  font: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+/* ---------- Generic round button ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: 16px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  font-size: 22px;
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
+  flex-shrink: 0;
+  touch-action: manipulation;
+}
+.btn:active {
+  transform: scale(0.92);
+}
+.btn.active {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent) inset, var(--shadow);
+  color: white;
+}
+.btn:disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+.btn.round {
+  border-radius: 50%;
+}
+/* The .btn display rule would otherwise override the UA [hidden] rule. */
+.btn[hidden] {
+  display: none;
+}
+
+/* ---------- Gallery screen ---------- */
+.gallery {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+}
+
+.gallery-topbar {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 14px 14px 8px;
+}
+
+.gallery-chips {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  gap: 10px;
+  padding: 6px 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.gallery-chips::-webkit-scrollbar { display: none; }
+.gallery-chips[hidden], .gallery-search-row[hidden] { display: none; }
+
+.gallery-search-row {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.search-input {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  border-radius: 999px;
+  border: none;
+  padding: 0 18px;
+  font-size: 18px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  touch-action: manipulation;
+}
+.search-input::placeholder {
+  color: var(--ink);
+  opacity: 0.4;
+}
+
+.chip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  min-height: 48px;
+  border-radius: 999px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  font-size: 22px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  touch-action: manipulation;
+}
+.chip.active {
+  background: var(--accent);
+  color: white;
+}
+.chip-icon {
+  pointer-events: none;
+}
+
+.chip-dl {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  touch-action: manipulation;
+}
+.chip-progress {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 4px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--accent-2);
+  width: 0%;
+  transition: width 0.15s linear;
+  z-index: 1;
+}
+
+.gallery-grid {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  padding: 10px 16px 30px;
+  align-content: start;
+}
+
+.card {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  touch-action: manipulation;
+}
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  /* Coloring pages are "paper": always white, even in dark mode, or black
+     line art on a transparent background disappears into the card. */
+  background: #fff;
+  border-radius: calc(var(--radius) - 6px);
+}
+.card:active {
+  transform: scale(0.96);
+}
+
+.card-delete {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  touch-action: manipulation;
+}
+
+.gallery-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 60px;
+  padding-top: 60px;
+  opacity: 0.5;
+}
+
+/* ---------- Confirm dialog ---------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(43, 45, 66, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+.dialog {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.dialog-emoji {
+  font-size: 48px;
+}
+.dialog-actions {
+  display: flex;
+  gap: 20px;
+}
+.dialog-actions .btn {
+  font-size: 30px;
+  min-width: 64px;
+  min-height: 64px;
+}
+
+/* ---------- Editor screen ---------- */
+.editor {
+  height: 100%;
+  position: relative;
+  background: #dfe7fd;
+  touch-action: none;
+}
+
+.editor canvas.display {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  display: block;
+}
+
+.editor-top {
+  position: absolute;
+  top: max(env(safe-area-inset-top, 0px), 10px);
+  left: max(env(safe-area-inset-left, 0px), 10px);
+  right: max(env(safe-area-inset-right, 0px), 10px);
+  display: flex;
+  justify-content: space-between;
+  z-index: 10;
+  pointer-events: none;
+}
+.editor-top .group {
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.editor-bottom {
+  position: absolute;
+  left: env(safe-area-inset-left, 0px);
+  right: env(safe-area-inset-right, 0px);
+  bottom: max(env(safe-area-inset-bottom, 0px), 10px);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  pointer-events: none;
+}
+
+.toolbar-row {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(6px);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 96vw;
+  pointer-events: auto;
+  scrollbar-width: none;
+  touch-action: pan-x;
+}
+.toolbar-row::-webkit-scrollbar { display: none; }
+
+.size-dot {
+  display: block;
+  border-radius: 50%;
+  background: var(--ink);
+  flex-shrink: 0;
+}
+
+.swatch {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.12);
+  position: relative;
+  touch-action: manipulation;
+}
+.swatch.active::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+}
+
+.export-flash {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 64px;
+  z-index: 20;
+  pointer-events: none;
+  animation: pop 0.9s ease forwards;
+}
+@keyframes pop {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #232336;
+    --card-bg: #2f2f47;
+    --ink: #f1f1f6;
+    --shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  }
+  .editor { background: #14141f; }
+  .toolbar-row { background: rgba(47, 47, 71, 0.9); }
+}
+
+/* ---------- Celebrate overlay ---------- */
+.celebrate-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.18), rgba(20, 20, 30, 0.72) 72%);
+  touch-action: none;
+  overflow: hidden;
+}
+.celebrate-confetti {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.celebrate-stage {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+.celebrate-art {
+  display: block;
+  max-width: 78vmin;
+  max-height: 62vmin;
+  width: auto;
+  height: auto;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+  animation: celebrate-breathe 2s ease-in-out infinite;
+}
+@keyframes celebrate-breathe {
+  0%, 100% { transform: scale(1) rotate(-0.6deg); }
+  50% { transform: scale(1.02) rotate(0.6deg); }
+}
+
+.celebrate-actions {
+  position: absolute;
+  left: 50%;
+  bottom: max(env(safe-area-inset-bottom, 0px), 24px);
+  transform: translateX(-50%);
+  display: flex;
+  gap: 14px;
+  z-index: 3;
+}
+.celebrate-actions .btn {
+  font-size: 26px;
+  min-width: 56px;
+  min-height: 56px;
+}

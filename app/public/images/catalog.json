@@ -1,0 +1,1792 @@
+{
+  "categories": [
+    {
+      "id": "animals",
+      "icon": "🐾"
+    },
+    {
+      "id": "nature",
+      "icon": "🌿"
+    },
+    {
+      "id": "vehicles",
+      "icon": "🚗"
+    },
+    {
+      "id": "characters",
+      "icon": "🦸"
+    },
+    {
+      "id": "funny",
+      "icon": "🤪"
+    },
+    {
+      "id": "events",
+      "icon": "🎉"
+    },
+    {
+      "id": "professions",
+      "icon": "👩‍🚒"
+    }
+  ],
+  "images": [
+    {
+      "id": "cat",
+      "file": "animals/cat.svg",
+      "title": "Sitting Cat",
+      "category": "animals",
+      "tags": {
+        "en": [
+          "cat",
+          "kitten",
+          "pet",
+          "whiskers"
+        ],
+        "ru": [
+          "кошка",
+          "кот",
+          "котята",
+          "пушистый"
+        ],
+        "de": [
+          "katze",
+          "kleine katze",
+          "haustier",
+          "bart"
+        ]
+      },
+      "frames": [
+        "animals/cat.svg",
+        "animals/cat.f2.svg"
+      ]
+    },
+    {
+      "id": "fish",
+      "file": "animals/fish.svg",
+      "title": "Happy Fish",
+      "category": "animals",
+      "tags": {
+        "en": [
+          "fish",
+          "sea",
+          "ocean",
+          "water",
+          "bubbles"
+        ],
+        "ru": [
+          "рыба",
+          "море",
+          "вода"
+        ],
+        "de": [
+          "fisch",
+          "meer",
+          "wasser"
+        ]
+      },
+      "frames": [
+        "animals/fish.svg",
+        "animals/fish.f2.svg"
+      ]
+    },
+    {
+      "id": "butterfly",
+      "file": "nature/butterfly.svg",
+      "title": "Butterfly",
+      "category": "nature",
+      "tags": {
+        "en": [
+          "butterfly",
+          "insect",
+          "wings",
+          "summer"
+        ],
+        "ru": [
+          "бабочка",
+          "насекомое",
+          "крылья",
+          "лето"
+        ],
+        "de": [
+          "schmetterling",
+          "insekten",
+          "flügel",
+          "sommer"
+        ]
+      },
+      "frames": [
+        "nature/butterfly.svg",
+        "nature/butterfly.f2.svg"
+      ]
+    },
+    {
+      "id": "mushroom-house",
+      "file": "nature/mushroom-house.svg",
+      "title": "Mushroom House",
+      "category": "nature",
+      "tags": {
+        "en": [
+          "mushroom",
+          "house",
+          "fairy",
+          "flowers"
+        ],
+        "ru": [
+          "гриб",
+          "дом",
+          "фея",
+          "цветы"
+        ],
+        "de": [
+          "pilz",
+          "haus",
+          "fee",
+          "blumen"
+        ]
+      },
+      "frames": [
+        "nature/mushroom-house.svg",
+        "nature/mushroom-house.f2.svg"
+      ]
+    },
+    {
+      "id": "rocket",
+      "file": "vehicles/rocket.svg",
+      "title": "Rocket",
+      "category": "vehicles",
+      "tags": {
+        "en": [
+          "rocket",
+          "space",
+          "stars",
+          "moon",
+          "flight"
+        ],
+        "ru": [
+          "ракета",
+          "космос",
+          "звезды",
+          "луна",
+          "полёт"
+        ],
+        "de": [
+          "rakete",
+          "schiff",
+          "sterne",
+          "mond",
+          "flucht"
+        ]
+      },
+      "frames": [
+        "vehicles/rocket.svg",
+        "vehicles/rocket.f2.svg"
+      ]
+    },
+    {
+      "id": "car",
+      "file": "vehicles/car.svg",
+      "title": "Little Car",
+      "category": "vehicles",
+      "tags": {
+        "en": [
+          "car",
+          "road",
+          "sun",
+          "wheels"
+        ],
+        "ru": [
+          "машина",
+          "дорога",
+          "солнце",
+          "колеса"
+        ],
+        "de": [
+          "auto",
+          "straße",
+          "sonne",
+          "räder"
+        ]
+      },
+      "frames": [
+        "vehicles/car.svg",
+        "vehicles/car.f2.svg"
+      ]
+    },
+    {
+      "id": "airbender",
+      "file": "characters/airbender.svg",
+      "title": "Arrow Kid",
+      "category": "characters",
+      "tags": {
+        "en": [
+          "monk",
+          "arrow",
+          "avatar",
+          "boy"
+        ],
+        "ru": [
+          "белый",
+          "стрелка",
+          "человек",
+          "мальчик"
+        ],
+        "de": [
+          "einsengeweiht",
+          "pfeil",
+          "avatar",
+          "junge"
+        ]
+      },
+      "frames": [
+        "characters/airbender.svg",
+        "characters/airbender.f2.svg"
+      ]
+    },
+    {
+      "id": "robot",
+      "file": "funny/robot.svg",
+      "title": "Silly Robot",
+      "category": "funny",
+      "tags": {
+        "en": [
+          "robot",
+          "machine",
+          "antenna",
+          "buttons"
+        ],
+        "ru": [
+          "робот",
+          "машина"
+        ],
+        "de": [
+          "robot",
+          "maschine"
+        ]
+      },
+      "frames": [
+        "funny/robot.svg",
+        "funny/robot.f2.svg"
+      ]
+    },
+    {
+      "id": "dinosaur",
+      "file": "animals/dinosaur.svg",
+      "title": "Friendly Dinosaur",
+      "category": "animals",
+      "tags": {
+        "en": [
+          "friendly",
+          "dinosaur"
+        ],
+        "ru": [
+          "дружелюбный",
+          "динозавр"
+        ],
+        "de": [
+          "freundlich",
+          "dinosaurier"
+        ]
+      },
+      "frames": [
+        "animals/dinosaur.svg",
+        "animals/dinosaur.f2.svg"
+      ]
+    },
+    {
+      "id": "hedgehog",
+      "file": "animals/hedgehog.svg",
+      "title": "Little Hedgehog",
+      "category": "animals",
+      "tags": {
+        "en": [
+          "little",
+          "hedgehog"
+        ],
+        "ru": [
+          "маленький",
+          "ёжик"
+        ],
+        "de": [
+          "klein",
+          "ihre"
+        ]
+      },
+      "frames": [
+        "animals/hedgehog.svg",
+        "animals/hedgehog.f2.svg"
+      ]
+    },
+    {
+      "id": "owl",
+      "file": "animals/owl.svg",
+      "title": "Wise Owl",
+      "category": "animals",
+      "tags": {
+        "en": [
+          "wise",
+          "owl"
+        ],
+        "ru": [
+          "мудрый",
+          "сова"
+        ],
+        "de": [
+          "weise",
+          "eule"
+        ]
+      },
+      "frames": [
+        "animals/owl.svg",
+        "animals/owl.f2.svg"
+      ]
+    },
+    {
+      "id": "whale",
+      "file": "animals/whale.svg",
+      "title": "Happy Whale",
+      "category": "animals",
+      "tags": {
+        "en": [
+          "happy",
+          "whale"
+        ],
+        "ru": [
+          "счастливый",
+          "кит"
+        ],
+        "de": [
+          "glücklich",
+          "wal"
+        ]
+      },
+      "frames": [
+        "animals/whale.svg",
+        "animals/whale.f2.svg"
+      ]
+    },
+    {
+      "id": "puppy",
+      "file": "animals/puppy.svg",
+      "title": "Playful Puppy",
+      "category": "animals",
+      "tags": {
+        "en": [
+          "playful",
+          "puppy"
+        ],
+        "ru": [
+          "игривый",
+          "щенок"
+        ],
+        "de": [
+          "spieler",
+          "welpe"
+        ]
+      },
+      "frames": [
+        "animals/puppy.svg",
+        "animals/puppy.f2.svg"
+      ]
+    },
+    {
+      "id": "elephant",
+      "file": "animals/elephant.svg",
+      "title": "Baby Elephant",
+      "category": "animals",
+      "tags": {
+        "en": [
+          "baby",
+          "elephant"
+        ],
+        "ru": [
+          "малыш",
+          "слон"
+        ],
+        "de": [
+          "baby",
+          "elefanten"
+        ]
+      },
+      "frames": [
+        "animals/elephant.svg",
+        "animals/elephant.f2.svg"
+      ]
+    },
+    {
+      "id": "penguin",
+      "file": "animals/penguin.svg",
+      "title": "Sliding Penguin",
+      "category": "animals",
+      "tags": {
+        "en": [
+          "sliding",
+          "penguin"
+        ],
+        "ru": [
+          "скользящий",
+          "пингвин"
+        ],
+        "de": [
+          "rutschen",
+          "pinguin"
+        ]
+      },
+      "frames": [
+        "animals/penguin.svg",
+        "animals/penguin.f2.svg"
+      ]
+    },
+    {
+      "id": "turtle",
+      "file": "animals/turtle.svg",
+      "title": "Slow Turtle",
+      "category": "animals",
+      "tags": {
+        "en": [
+          "slow",
+          "turtle"
+        ],
+        "ru": [
+          "медленный",
+          "черепашка"
+        ],
+        "de": [
+          "langsam",
+          "schildkröte"
+        ]
+      },
+      "frames": [
+        "animals/turtle.svg",
+        "animals/turtle.f2.svg"
+      ]
+    },
+    {
+      "id": "rainbow",
+      "file": "nature/rainbow.svg",
+      "title": "Rainbow and Clouds",
+      "category": "nature",
+      "tags": {
+        "en": [
+          "rainbow",
+          "and",
+          "clouds"
+        ],
+        "ru": [
+          "радуга",
+          "и",
+          "облака"
+        ],
+        "de": [
+          "regenbogen",
+          "und",
+          "wolken"
+        ]
+      },
+      "frames": [
+        "nature/rainbow.svg",
+        "nature/rainbow.f2.svg"
+      ]
+    },
+    {
+      "id": "snowman",
+      "file": "nature/snowman.svg",
+      "title": "Cheerful Snowman",
+      "category": "nature",
+      "tags": {
+        "en": [
+          "cheerful",
+          "snowman"
+        ],
+        "ru": [
+          "веселый",
+          "снеговик"
+        ],
+        "de": [
+          "fröhlich",
+          "schneemann"
+        ]
+      },
+      "frames": [
+        "nature/snowman.svg",
+        "nature/snowman.f2.svg"
+      ]
+    },
+    {
+      "id": "flower-meadow",
+      "file": "nature/flower-meadow.svg",
+      "title": "Flower Meadow",
+      "category": "nature",
+      "tags": {
+        "en": [
+          "flower",
+          "meadow"
+        ],
+        "ru": [
+          "цветок",
+          "поля"
+        ],
+        "de": [
+          "blume",
+          "wiesen"
+        ]
+      },
+      "frames": [
+        "nature/flower-meadow.svg",
+        "nature/flower-meadow.f2.svg"
+      ]
+    },
+    {
+      "id": "tree-house",
+      "file": "nature/tree-house.svg",
+      "title": "Cozy Treehouse",
+      "category": "nature",
+      "tags": {
+        "en": [
+          "cozy",
+          "treehouse"
+        ],
+        "ru": [
+          "уют",
+          "домик на дереве"
+        ],
+        "de": [
+          "gemütlich",
+          "baumeister"
+        ]
+      },
+      "frames": [
+        "nature/tree-house.svg",
+        "nature/tree-house.f2.svg"
+      ]
+    },
+    {
+      "id": "volcano",
+      "file": "nature/volcano.svg",
+      "title": "Little Volcano",
+      "category": "nature",
+      "tags": {
+        "en": [
+          "little",
+          "volcano"
+        ],
+        "ru": [
+          "маленький",
+          "вулкан"
+        ],
+        "de": [
+          "klein",
+          "vulkan"
+        ]
+      },
+      "frames": [
+        "nature/volcano.svg",
+        "nature/volcano.f2.svg"
+      ]
+    },
+    {
+      "id": "campfire",
+      "file": "nature/campfire.svg",
+      "title": "Camping Night",
+      "category": "nature",
+      "tags": {
+        "en": [
+          "camping",
+          "night"
+        ],
+        "ru": [
+          "кемпинг",
+          "ночь"
+        ],
+        "de": [
+          "campen",
+          "nacht"
+        ]
+      },
+      "frames": [
+        "nature/campfire.svg",
+        "nature/campfire.f2.svg"
+      ]
+    },
+    {
+      "id": "seashell",
+      "file": "nature/seashell.svg",
+      "title": "Beach Seashell",
+      "category": "nature",
+      "tags": {
+        "en": [
+          "beach",
+          "seashell"
+        ],
+        "ru": [
+          "пляж",
+          "ракушка"
+        ],
+        "de": [
+          "strand",
+          "muschel"
+        ]
+      },
+      "frames": [
+        "nature/seashell.svg",
+        "nature/seashell.f2.svg"
+      ]
+    },
+    {
+      "id": "excavator",
+      "file": "vehicles/excavator.svg",
+      "title": "Digging Excavator",
+      "category": "vehicles",
+      "tags": {
+        "en": [
+          "digging",
+          "excavator"
+        ],
+        "ru": [
+          "копать",
+          "экскаватор"
+        ],
+        "de": [
+          "graben",
+          "bagger"
+        ]
+      },
+      "frames": [
+        "vehicles/excavator.svg",
+        "vehicles/excavator.f2.svg"
+      ]
+    },
+    {
+      "id": "train",
+      "file": "vehicles/train.svg",
+      "title": "Steam Train",
+      "category": "vehicles",
+      "tags": {
+        "en": [
+          "steam",
+          "train"
+        ],
+        "ru": [
+          "паровоз",
+          "поезд"
+        ],
+        "de": [
+          "dampflok",
+          "zug"
+        ]
+      },
+      "frames": [
+        "vehicles/train.svg",
+        "vehicles/train.f2.svg"
+      ]
+    },
+    {
+      "id": "sailboat",
+      "file": "vehicles/sailboat.svg",
+      "title": "Little Sailboat",
+      "category": "vehicles",
+      "tags": {
+        "en": [
+          "little",
+          "sailboat"
+        ],
+        "ru": [
+          "маленький",
+          "парусник"
+        ],
+        "de": [
+          "klein",
+          "segelschiff"
+        ]
+      },
+      "frames": [
+        "vehicles/sailboat.svg",
+        "vehicles/sailboat.f2.svg"
+      ]
+    },
+    {
+      "id": "hot-air-balloon",
+      "file": "vehicles/hot-air-balloon.svg",
+      "title": "Hot Air Balloon",
+      "category": "vehicles",
+      "tags": {
+        "en": [
+          "hot",
+          "air",
+          "balloon"
+        ],
+        "ru": [
+          "жаркий",
+          "воздух",
+          "воздушный шарик"
+        ],
+        "de": [
+          "heiß",
+          "luft",
+          "ballon"
+        ]
+      },
+      "frames": [
+        "vehicles/hot-air-balloon.svg",
+        "vehicles/hot-air-balloon.f2.svg"
+      ]
+    },
+    {
+      "id": "fire-truck",
+      "file": "vehicles/fire-truck.svg",
+      "title": "Fire Truck",
+      "category": "vehicles",
+      "tags": {
+        "en": [
+          "fire",
+          "truck"
+        ],
+        "ru": [
+          "огонь",
+          "грузовик"
+        ],
+        "de": [
+          "feuer",
+          "laster"
+        ]
+      },
+      "frames": [
+        "vehicles/fire-truck.svg",
+        "vehicles/fire-truck.f2.svg"
+      ]
+    },
+    {
+      "id": "submarine",
+      "file": "vehicles/submarine.svg",
+      "title": "Yellow Submarine",
+      "category": "vehicles",
+      "tags": {
+        "en": [
+          "yellow",
+          "submarine"
+        ],
+        "ru": [
+          "желтый",
+          "подводная лодка"
+        ],
+        "de": [
+          "gelb",
+          "u-boot"
+        ]
+      },
+      "frames": [
+        "vehicles/submarine.svg",
+        "vehicles/submarine.f2.svg"
+      ]
+    },
+    {
+      "id": "monk-boy",
+      "file": "characters/monk-boy.svg",
+      "title": "Arrow Staff Monk",
+      "category": "characters",
+      "tags": {
+        "en": [
+          "arrow",
+          "staff",
+          "monk"
+        ],
+        "ru": [
+          "стрелка",
+          "пастух",
+          "монах"
+        ],
+        "de": [
+          "pfeil",
+          "stab",
+          "mönch"
+        ]
+      },
+      "frames": [
+        "characters/monk-boy.svg",
+        "characters/monk-boy.f2.svg"
+      ]
+    },
+    {
+      "id": "big-ear-creature",
+      "file": "characters/big-ear-creature.svg",
+      "title": "Big Ear Creature",
+      "category": "characters",
+      "tags": {
+        "en": [
+          "ears",
+          "creature",
+          "oranges",
+          "crate",
+          "cute"
+        ],
+        "ru": [
+          "уши",
+          "существо",
+          "апельсины",
+          "ящик",
+          "милый"
+        ],
+        "de": [
+          "ohren",
+          "wesen",
+          "orangen",
+          "kiste",
+          "niedlich"
+        ]
+      },
+      "frames": [
+        "characters/big-ear-creature.svg",
+        "characters/big-ear-creature.f2.svg"
+      ]
+    },
+    {
+      "id": "bun-hero",
+      "file": "characters/bun-hero.svg",
+      "title": "Rolling Bun Hero",
+      "category": "characters",
+      "tags": {
+        "en": [
+          "bun",
+          "rolling",
+          "forest",
+          "fairy",
+          "tale"
+        ],
+        "ru": [
+          "булка",
+          "катящийся",
+          "лес",
+          "фея",
+          "сказка"
+        ],
+        "de": [
+          "brötchen",
+          "rollend",
+          "wald",
+          "fee",
+          "geschichte"
+        ]
+      },
+      "frames": [
+        "characters/bun-hero.svg",
+        "characters/bun-hero.f2.svg"
+      ]
+    },
+    {
+      "id": "wolf-guitar",
+      "file": "characters/wolf-guitar.svg",
+      "title": "Wolf with Guitar",
+      "category": "characters",
+      "tags": {
+        "en": [
+          "wolf",
+          "with",
+          "guitar"
+        ],
+        "ru": [
+          "волк",
+          "с",
+          "гитара"
+        ],
+        "de": [
+          "wolf",
+          "mit",
+          "gitarre"
+        ]
+      },
+      "frames": [
+        "characters/wolf-guitar.svg",
+        "characters/wolf-guitar.f2.svg"
+      ]
+    },
+    {
+      "id": "fisherman",
+      "file": "characters/fisherman.svg",
+      "title": "Old Fisherman",
+      "category": "characters",
+      "tags": {
+        "en": [
+          "old",
+          "fisherman"
+        ],
+        "ru": [
+          "старый",
+          "рыбак"
+        ],
+        "de": [
+          "alt",
+          "fischer"
+        ]
+      },
+      "frames": [
+        "characters/fisherman.svg",
+        "characters/fisherman.f2.svg"
+      ]
+    },
+    {
+      "id": "knight-kid",
+      "file": "characters/knight-kid.svg",
+      "title": "Little Knight",
+      "category": "characters",
+      "tags": {
+        "en": [
+          "little",
+          "knight"
+        ],
+        "ru": [
+          "маленький",
+          "рыцарь"
+        ],
+        "de": [
+          "klein",
+          "ritter"
+        ]
+      },
+      "frames": [
+        "characters/knight-kid.svg",
+        "characters/knight-kid.f2.svg"
+      ]
+    },
+    {
+      "id": "cat-bicycle",
+      "file": "funny/cat-bicycle.svg",
+      "title": "Cat on a Bicycle",
+      "category": "funny",
+      "tags": {
+        "en": [
+          "cat",
+          "bicycle"
+        ],
+        "ru": [
+          "кот",
+          "велосипед"
+        ],
+        "de": [
+          "katze",
+          "fahrrad"
+        ]
+      },
+      "frames": [
+        "funny/cat-bicycle.svg",
+        "funny/cat-bicycle.f2.svg"
+      ]
+    },
+    {
+      "id": "pancake-surfer",
+      "file": "funny/pancake-surfer.svg",
+      "title": "Surfing Pancake",
+      "category": "funny",
+      "tags": {
+        "en": [
+          "surfing",
+          "pancake"
+        ],
+        "ru": [
+          "серфинг",
+          "блин"
+        ],
+        "de": [
+          "surfen",
+          "pfannkuchen"
+        ]
+      },
+      "frames": [
+        "funny/pancake-surfer.svg",
+        "funny/pancake-surfer.f2.svg"
+      ]
+    },
+    {
+      "id": "dino-ice-cream",
+      "file": "funny/dino-ice-cream.svg",
+      "title": "Dinosaur Eating Ice Cream",
+      "category": "funny",
+      "tags": {
+        "en": [
+          "dinosaur",
+          "eating",
+          "ice",
+          "cream"
+        ],
+        "ru": [
+          "динозавр",
+          "еда",
+          "лед",
+          "мороженое"
+        ],
+        "de": [
+          "dinosaurier",
+          "essen",
+          "eins",
+          "eis"
+        ]
+      },
+      "frames": [
+        "funny/dino-ice-cream.svg",
+        "funny/dino-ice-cream.f2.svg"
+      ]
+    },
+    {
+      "id": "flying-whale",
+      "file": "funny/flying-whale.svg",
+      "title": "Flying Whale",
+      "category": "funny",
+      "tags": {
+        "en": [
+          "flying",
+          "whale"
+        ],
+        "ru": [
+          "летающий",
+          "кит"
+        ],
+        "de": [
+          "fliegend",
+          "wal"
+        ]
+      },
+      "frames": [
+        "funny/flying-whale.svg",
+        "funny/flying-whale.f2.svg"
+      ]
+    },
+    {
+      "id": "robot-dance",
+      "file": "funny/robot-dance.svg",
+      "title": "Dancing Robot",
+      "category": "funny",
+      "tags": {
+        "en": [
+          "dancing",
+          "robot"
+        ],
+        "ru": [
+          "танцующий",
+          "робот"
+        ],
+        "de": [
+          "tanzend",
+          "robot"
+        ]
+      },
+      "frames": [
+        "funny/robot-dance.svg",
+        "funny/robot-dance.f2.svg"
+      ]
+    },
+    {
+      "id": "birthday-party",
+      "file": "events/birthday-party.svg",
+      "title": "Birthday Party",
+      "category": "events",
+      "tags": {
+        "en": [
+          "birthday",
+          "party",
+          "cake",
+          "balloons",
+          "candles",
+          "celebration"
+        ],
+        "ru": [
+          "день рождения",
+          "вечеринка",
+          "торт",
+          "шары"
+        ],
+        "de": [
+          "geburtstag",
+          "feier",
+          "torte",
+          "ballons"
+        ]
+      },
+      "frames": [
+        "events/birthday-party.svg",
+        "events/birthday-party.f2.svg"
+      ]
+    },
+    {
+      "id": "fathers-day",
+      "file": "events/fathers-day.svg",
+      "title": "Gift for Dad",
+      "category": "events",
+      "tags": {
+        "en": [
+          "dad",
+          "father",
+          "gift",
+          "drawing",
+          "family",
+          "love"
+        ],
+        "ru": [
+          "папа",
+          "отца",
+          "подарок",
+          "рисунок",
+          "семья",
+          "любовь"
+        ],
+        "de": [
+          "papa",
+          "vater",
+          "geschenk",
+          "zeichnung",
+          "familie",
+          "liebe"
+        ]
+      },
+      "frames": [
+        "events/fathers-day.svg",
+        "events/fathers-day.f2.svg"
+      ]
+    },
+    {
+      "id": "mothers-day",
+      "file": "events/mothers-day.svg",
+      "title": "Flowers for Mom",
+      "category": "events",
+      "tags": {
+        "en": [
+          "mom",
+          "mother",
+          "flowers",
+          "bouquet",
+          "family",
+          "love"
+        ],
+        "ru": [
+          "мама",
+          "цветы",
+          "семья",
+          "любовь"
+        ],
+        "de": [
+          "mutter",
+          "blumen",
+          "familie",
+          "liebe"
+        ]
+      },
+      "frames": [
+        "events/mothers-day.svg",
+        "events/mothers-day.f2.svg"
+      ]
+    },
+    {
+      "id": "first-school-day",
+      "file": "events/first-school-day.svg",
+      "title": "First Day at School",
+      "category": "events",
+      "tags": {
+        "en": [
+          "school",
+          "backpack",
+          "first",
+          "day",
+          "student",
+          "learning"
+        ],
+        "ru": [
+          "школа",
+          "портфель",
+          "первый день",
+          "ученик",
+          "уроки"
+        ],
+        "de": [
+          "schule",
+          "ranzen",
+          "erster tag",
+          "schüler",
+          "lernen"
+        ]
+      },
+      "frames": [
+        "events/first-school-day.svg",
+        "events/first-school-day.f2.svg"
+      ]
+    },
+    {
+      "id": "first-kindergarten-day",
+      "file": "events/first-kindergarten-day.svg",
+      "title": "First Day at Kindergarten",
+      "category": "events",
+      "tags": {
+        "en": [
+          "kindergarten",
+          "teddy",
+          "bear",
+          "first",
+          "day",
+          "playground"
+        ],
+        "ru": [
+          "детский сад",
+          "плюш",
+          "медведь",
+          "первый",
+          "день",
+          "площадка"
+        ],
+        "de": [
+          "kindergarten",
+          "teddy",
+          "bär",
+          "erst",
+          "tag",
+          "spielplatz"
+        ]
+      },
+      "frames": [
+        "events/first-kindergarten-day.svg",
+        "events/first-kindergarten-day.f2.svg"
+      ]
+    },
+    {
+      "id": "spring-day",
+      "file": "events/spring-day.svg",
+      "title": "Spring Is Here",
+      "category": "events",
+      "tags": {
+        "en": [
+          "spring",
+          "snow",
+          "melting",
+          "flowers",
+          "sun",
+          "season"
+        ],
+        "ru": [
+          "весна",
+          "снег",
+          "таяние",
+          "цветок",
+          "солнце",
+          "время года"
+        ],
+        "de": [
+          "frühling",
+          "schnee",
+          "schmelzen",
+          "blume",
+          "sonne",
+          "jahreszeit"
+        ]
+      },
+      "frames": [
+        "events/spring-day.svg",
+        "events/spring-day.f2.svg"
+      ]
+    },
+    {
+      "id": "new-year-tree",
+      "file": "events/new-year-tree.svg",
+      "title": "New Year Tree",
+      "category": "events",
+      "tags": {
+        "en": [
+          "new",
+          "year",
+          "tree",
+          "presents",
+          "star",
+          "holiday",
+          "winter"
+        ],
+        "ru": [
+          "новый",
+          "год",
+          "дерево",
+          "подарки",
+          "звезда",
+          "праздник",
+          "зима"
+        ],
+        "de": [
+          "neu",
+          "jahr",
+          "baum",
+          "geschenke",
+          "stern",
+          "feiertag",
+          "winter"
+        ]
+      },
+      "frames": [
+        "events/new-year-tree.svg",
+        "events/new-year-tree.f2.svg"
+      ]
+    },
+    {
+      "id": "sea-sunset",
+      "file": "events/sea-sunset.svg",
+      "title": "Sunset over the Sea",
+      "category": "events",
+      "tags": {
+        "en": [
+          "sunset",
+          "sea",
+          "sun",
+          "waves",
+          "evening",
+          "beach"
+        ],
+        "ru": [
+          "закат",
+          "море",
+          "солнце",
+          "волны",
+          "вечер",
+          "пляж"
+        ],
+        "de": [
+          "sonnenuntergang",
+          "meer",
+          "sonne",
+          "wellen",
+          "abend",
+          "strand"
+        ]
+      },
+      "frames": [
+        "events/sea-sunset.svg",
+        "events/sea-sunset.f2.svg"
+      ]
+    },
+    {
+      "id": "night-animals",
+      "file": "events/night-animals.svg",
+      "title": "Night Friends",
+      "category": "events",
+      "tags": {
+        "en": [
+          "night",
+          "owl",
+          "hedgehog",
+          "moon",
+          "stars",
+          "animals",
+          "nocturnal"
+        ],
+        "ru": [
+          "ночь",
+          "сова",
+          "ёжик",
+          "луна",
+          "звезды",
+          "животные",
+          "ночные"
+        ],
+        "de": [
+          "nacht",
+          "eule",
+          "ihrich",
+          "mond",
+          "sterne",
+          "tiere",
+          "nachtaktiv"
+        ]
+      },
+      "frames": [
+        "events/night-animals.svg",
+        "events/night-animals.f2.svg"
+      ]
+    },
+    {
+      "id": "pets-party",
+      "file": "events/pets-party.svg",
+      "title": "Pets Home Alone",
+      "category": "events",
+      "tags": {
+        "en": [
+          "pets",
+          "cat",
+          "dog",
+          "party",
+          "home",
+          "funny"
+        ],
+        "ru": [
+          "животные",
+          "кошка",
+          "собака",
+          "вечеринка",
+          "дом",
+          "смешные"
+        ],
+        "de": [
+          "tiere",
+          "katze",
+          "hund",
+          "party",
+          "haus",
+          "lustig"
+        ]
+      },
+      "frames": [
+        "events/pets-party.svg",
+        "events/pets-party.f2.svg"
+      ]
+    },
+    {
+      "id": "first-rocket-flight",
+      "file": "events/first-rocket-flight.svg",
+      "title": "First Flight to Space",
+      "category": "events",
+      "tags": {
+        "en": [
+          "rocket",
+          "space",
+          "flight",
+          "astronaut",
+          "stars",
+          "launch"
+        ],
+        "ru": [
+          "ракета",
+          "космос",
+          "полёт",
+          "космонавт",
+          "звёзды",
+          "запуск"
+        ],
+        "de": [
+          "rakete",
+          "raum",
+          "flug",
+          "astronaut",
+          "sterne",
+          "start"
+        ]
+      },
+      "frames": [
+        "events/first-rocket-flight.svg",
+        "events/first-rocket-flight.f2.svg"
+      ]
+    },
+    {
+      "id": "alien-friend",
+      "file": "events/alien-friend.svg",
+      "title": "Alien Friend",
+      "category": "events",
+      "tags": {
+        "en": [
+          "alien",
+          "space",
+          "friend",
+          "kid",
+          "ufo",
+          "hello"
+        ],
+        "ru": [
+          "пришелец",
+          "космос",
+          "друг",
+          "ребенок",
+          "нло",
+          "привет"
+        ],
+        "de": [
+          "außerirdisch",
+          "raum",
+          "freund",
+          "kind",
+          "ufo",
+          "hallo"
+        ]
+      },
+      "frames": [
+        "events/alien-friend.svg",
+        "events/alien-friend.f2.svg"
+      ]
+    },
+    {
+      "id": "fruit-friends",
+      "file": "events/fruit-friends.svg",
+      "title": "Fruit Friends",
+      "category": "events",
+      "tags": {
+        "en": [
+          "fruits",
+          "vegetables",
+          "apple",
+          "carrot",
+          "pear",
+          "faces",
+          "food"
+        ],
+        "ru": [
+          "фрукты",
+          "овощи",
+          "яблоко",
+          "морковь",
+          "груша",
+          "лица",
+          "еда"
+        ],
+        "de": [
+          "früchte",
+          "gemüse",
+          "apfel",
+          "karotte",
+          "birne",
+          "gesichter",
+          "essen"
+        ]
+      },
+      "frames": [
+        "events/fruit-friends.svg",
+        "events/fruit-friends.f2.svg"
+      ]
+    },
+    {
+      "id": "living-objects",
+      "file": "events/living-objects.svg",
+      "title": "Living Objects",
+      "category": "events",
+      "tags": {
+        "en": [
+          "teapot",
+          "chair",
+          "objects",
+          "faces",
+          "home",
+          "funny"
+        ],
+        "ru": [
+          "чайник",
+          "стул",
+          "предметы",
+          "лица",
+          "дом",
+          "смешные"
+        ],
+        "de": [
+          "teekanne",
+          "stuhl",
+          "gegenstände",
+          "gesichter",
+          "haus",
+          "lustig"
+        ]
+      },
+      "frames": [
+        "events/living-objects.svg",
+        "events/living-objects.f2.svg"
+      ]
+    },
+    {
+      "id": "wedding-dance",
+      "file": "events/wedding-dance.svg",
+      "title": "Wedding Dance",
+      "category": "events",
+      "tags": {
+        "en": [
+          "wedding",
+          "bride",
+          "groom",
+          "dance",
+          "celebration",
+          "love"
+        ],
+        "ru": [
+          "свадьба",
+          "невеста",
+          "жених",
+          "танец",
+          "праздник",
+          "любовь"
+        ],
+        "de": [
+          "hochzeit",
+          "braut",
+          "brut",
+          "tanz",
+          "feier",
+          "liebe"
+        ]
+      },
+      "frames": [
+        "events/wedding-dance.svg",
+        "events/wedding-dance.f2.svg"
+      ]
+    },
+    {
+      "id": "memory-flowers",
+      "file": "events/memory-flowers.svg",
+      "title": "Remembering Together",
+      "category": "events",
+      "tags": {
+        "en": [
+          "memorial",
+          "flowers",
+          "tree",
+          "remembrance",
+          "quiet",
+          "together"
+        ],
+        "ru": [
+          "память",
+          "цветы",
+          "дерево",
+          "вместе",
+          "спокойствие"
+        ],
+        "de": [
+          "gedenk",
+          "blumen",
+          "baum",
+          "zusammen",
+          "ruhig"
+        ]
+      },
+      "frames": [
+        "events/memory-flowers.svg",
+        "events/memory-flowers.f2.svg"
+      ]
+    },
+    {
+      "id": "firefighter",
+      "file": "professions/firefighter.svg",
+      "title": "Brave Firefighter",
+      "category": "professions",
+      "tags": {
+        "en": [
+          "firefighter",
+          "hose",
+          "helmet",
+          "fire",
+          "rescue",
+          "brave"
+        ],
+        "ru": [
+          "пожарный",
+          "шлейф",
+          "каска",
+          "огонь",
+          "спасение",
+          "смелый"
+        ],
+        "de": [
+          "feuerwehrmann",
+          "schlauch",
+          "helm",
+          "feuer",
+          "rettung",
+          "tapfer"
+        ]
+      },
+      "frames": [
+        "professions/firefighter.svg",
+        "professions/firefighter.f2.svg"
+      ]
+    },
+    {
+      "id": "doctor",
+      "file": "professions/doctor.svg",
+      "title": "Kind Doctor",
+      "category": "professions",
+      "tags": {
+        "en": [
+          "doctor",
+          "stethoscope",
+          "teddy",
+          "bear",
+          "hospital",
+          "health"
+        ],
+        "ru": [
+          "доктор",
+          "врач",
+          "медвежонок",
+          "больница",
+          "здоровье"
+        ],
+        "de": [
+          "arzt",
+          "doktor",
+          "teddy",
+          "tier",
+          "krankenhaus",
+          "gesundheit"
+        ]
+      },
+      "frames": [
+        "professions/doctor.svg",
+        "professions/doctor.f2.svg"
+      ]
+    },
+    {
+      "id": "chef",
+      "file": "professions/chef.svg",
+      "title": "Happy Chef",
+      "category": "professions",
+      "tags": {
+        "en": [
+          "chef",
+          "cook",
+          "pot",
+          "hat",
+          "kitchen",
+          "food"
+        ],
+        "ru": [
+          "шеф",
+          "кулинария",
+          "кастрюля",
+          "шляпа",
+          "кухня",
+          "еда"
+        ],
+        "de": [
+          "koch",
+          "kochen",
+          "topf",
+          "mütze",
+          "küche",
+          "essen"
+        ]
+      },
+      "frames": [
+        "professions/chef.svg",
+        "professions/chef.f2.svg"
+      ]
+    },
+    {
+      "id": "astronaut",
+      "file": "professions/astronaut.svg",
+      "title": "Floating Astronaut",
+      "category": "professions",
+      "tags": {
+        "en": [
+          "astronaut",
+          "space",
+          "suit",
+          "floating",
+          "stars",
+          "cosmos"
+        ],
+        "ru": [
+          "космонавт",
+          "космос",
+          "костюм",
+          "парящий",
+          "звезды",
+          "вселенная"
+        ],
+        "de": [
+          "astronaut",
+          "raum",
+          "anzug",
+          "schwebend",
+          "sterne",
+          "kosmos"
+        ]
+      },
+      "frames": [
+        "professions/astronaut.svg",
+        "professions/astronaut.f2.svg"
+      ]
+    }
+  ]
+}

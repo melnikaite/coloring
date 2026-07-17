@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <g fill="#fff" stroke="#000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="220" cy="170" r="26"/>
+    <circle cx="300" cy="110" r="18"/>
+    <circle cx="160" cy="260" r="14"/>
+    <path d="M120 950 C 100 870 150 830 128 745 M180 955 C 195 880 150 840 172 760" fill="none"/>
+    <path d="M905 950 C 885 870 935 830 913 745 M845 955 C 860 880 815 840 837 760" fill="none"/>
+    <path d="M60 955 C 300 920 700 985 964 945" fill="none"/>
+    <path d="M430 392 C 450 300 570 288 622 338 L 585 405 Z"/>
+    <path d="M770 505 L 905 395 C 935 505 935 515 905 615 Z"/>
+    <path d="M170 512 C 260 370 640 350 780 500 C 640 660 260 655 170 512 Z"/>
+    <path d="M480 638 C 470 710 542 732 582 700 L 545 628 Z"/>
+    <path d="M370 420 C 338 470 338 552 375 602" fill="none"/>
+    <path d="M505 385 C 472 470 472 560 508 632 M610 378 C 577 462 577 552 613 625" fill="none"/>
+    <circle cx="298" cy="478" r="27"/>
+    <circle cx="298" cy="478" r="10" fill="#000"/>
+    <path d="M225 560 C 245 585 275 588 295 572" fill="none"/>
+  </g>
+</svg>

@@ -1,0 +1,70 @@
+# Starter batch for `uv run gen --batch prompts/starter.txt --backend banana|gemma`
+# Format: category | id | title | subject prompt [| tags]
+# Tags are comma-separated English search keywords; without them, words from
+# the title are used. Lines starting with # are skipped.
+
+# --- animals ---
+animals | dinosaur | Friendly Dinosaur | a friendly cartoon dinosaur with a big smile standing in a meadow
+animals | hedgehog | Little Hedgehog | a cute round hedgehog with small spikes and a berry on its nose
+animals | owl | Wise Owl | a wise owl with big round eyes sitting on a tree branch
+animals | whale | Happy Whale | a happy whale spouting water, swimming in gentle waves
+animals | puppy | Playful Puppy | a playful puppy with floppy ears chasing its own tail
+animals | elephant | Baby Elephant | a baby elephant playing with a ball, ears flapping
+animals | penguin | Sliding Penguin | a penguin sliding on its belly down a small icy hill
+animals | turtle | Slow Turtle | a smiling turtle with a patterned shell walking on the grass
+
+# --- nature ---
+nature | rainbow | Rainbow and Clouds | a big rainbow arching over fluffy clouds and a sun with a face
+nature | snowman | Cheerful Snowman | a cheerful snowman wearing a scarf and a bucket hat, holding a broom
+nature | flower-meadow | Flower Meadow | a meadow full of large simple flowers and a butterfly
+nature | tree-house | Cozy Treehouse | a cozy treehouse built in a big tree with a rope ladder
+nature | volcano | Little Volcano | a small friendly-looking volcano with a puff of smoke on top
+nature | campfire | Camping Night | a campfire surrounded by tents under a starry sky
+nature | seashell | Beach Seashell | a large spiral seashell on a sandy beach with small waves
+
+# --- vehicles ---
+vehicles | excavator | Digging Excavator | a cartoon excavator digging in a construction site
+vehicles | train | Steam Train | a friendly steam train with round windows and a puff of smoke
+vehicles | sailboat | Little Sailboat | a small sailboat with a triangular sail on calm waves
+vehicles | hot-air-balloon | Hot Air Balloon | a round hot air balloon with a woven basket floating among clouds
+vehicles | fire-truck | Fire Truck | a cartoon fire truck with a ladder and a big front bumper
+vehicles | submarine | Yellow Submarine | a round friendly submarine with a porthole window underwater
+
+# --- characters (generic, no franchise names) ---
+characters | monk-boy | Arrow Staff Monk | a bald young monk boy with an arrow tattoo on his head holding a wooden staff, cartoon style
+characters | big-ear-creature | Big Ear Creature | a small creature with huge round ears standing next to an orange crate
+characters | bun-hero | Rolling Bun Hero | a cheerful round bun character with a smiling face rolling along a forest path
+characters | wolf-guitar | Wolf with Guitar | a wolf with a guitar next to a rabbit, both smiling, cartoon style
+characters | fisherman | Old Fisherman | an old man with a big fish in a small boat on the sea
+characters | knight-kid | Little Knight | a small kid knight in cardboard-looking armor holding a wooden sword and a round shield
+
+# --- funny / absurd ---
+funny | cat-bicycle | Cat on a Bicycle | a cat riding a bicycle with a big grin, front wheel lifted in the air
+funny | pancake-surfer | Surfing Pancake | a pancake wearing sunglasses surfing on a big wave
+funny | dino-ice-cream | Dinosaur Eating Ice Cream | a dinosaur happily eating a giant ice cream cone
+funny | flying-whale | Flying Whale | a whale with tiny wings flying between clouds
+funny | robot-dance | Dancing Robot | a boxy cartoon robot dancing with its arms up
+
+# --- events ---
+events | birthday-party | Birthday Party | a birthday party with a big layered cake, candles and balloons | birthday, party, cake, balloons, candles, celebration
+events | fathers-day | Gift for Dad | a happy kid giving their dad a hand-made drawing, both smiling | dad, father, gift, drawing, family, love
+events | mothers-day | Flowers for Mom | a happy kid giving their mom a bouquet of big simple flowers | mom, mother, flowers, bouquet, family, love
+events | first-school-day | First Day at School | a smiling kid with a big backpack waving in front of a small school building | school, backpack, first, day, student, learning
+events | first-kindergarten-day | First Day at Kindergarten | a small kid holding a teddy bear at the door of a cheerful kindergarten with a slide in the yard | kindergarten, teddy, bear, first, day, playground
+events | spring-day | Spring Is Here | a spring day with melting snow patches and the first flowers peeking out, sun shining | spring, snow, melting, flowers, sun, season
+events | new-year-tree | New Year Tree | a decorated fir tree with baubles and a star on top, wrapped presents underneath | new, year, tree, presents, star, holiday, winter
+events | sea-sunset | Sunset over the Sea | a big round sun setting over calm sea waves with a few clouds | sunset, sea, sun, waves, evening, beach
+events | night-animals | Night Friends | nocturnal animals awake at night: an owl on a branch and a hedgehog below, big crescent moon and stars | night, owl, hedgehog, moon, stars, animals, nocturnal
+events | pets-party | Pets Home Alone | a cat and a dog having a party at home alone with party hats and streamers | pets, cat, dog, party, home, funny
+events | first-rocket-flight | First Flight to Space | a rocket lifting off toward the stars with a happy astronaut waving from the window | rocket, space, flight, astronaut, stars, launch
+events | alien-friend | Alien Friend | a friendly round alien with big eyes waving hello to a smiling kid | alien, space, friend, kid, ufo, hello
+events | fruit-friends | Fruit Friends | living fruits and vegetables with happy faces: an apple, a carrot and a pear holding hands | fruits, vegetables, apple, carrot, pear, faces, food
+events | living-objects | Living Objects | living household objects with friendly faces: a teapot and a chair smiling at each other | teapot, chair, objects, faces, home, funny
+events | wedding-dance | Wedding Dance | a bride and groom dancing together at a wedding, confetti in the air | wedding, bride, groom, dance, celebration, love
+events | memory-flowers | Remembering Together | people quietly bringing flowers to a small memorial stone under a big gentle tree | memorial, flowers, tree, remembrance, quiet, together
+
+# --- professions ---
+professions | firefighter | Brave Firefighter | a friendly firefighter in a helmet holding a hose with a splash of water | firefighter, hose, helmet, fire, rescue, brave
+professions | doctor | Kind Doctor | a kind doctor with a stethoscope listening to a teddy bear patient | doctor, stethoscope, teddy, bear, hospital, health
+professions | chef | Happy Chef | a happy chef in a tall hat stirring a big pot with a wooden spoon | chef, cook, pot, hat, kitchen, food
+professions | astronaut | Floating Astronaut | an astronaut in a puffy space suit floating happily among stars | astronaut, space, suit, floating, stars, cosmos
