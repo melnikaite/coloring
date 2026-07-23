@@ -1,5 +1,7 @@
 /** IndexedDB persistence for saved colorings ("My works"). */
 
+import type { PaintOp } from './engine/ops';
+
 export interface Work {
   /**
    * Unique id of this coloring session. New works get `<imageId>-<random>`;
@@ -9,14 +11,27 @@ export interface Work {
   workId: string;
   imageId: string;
   updatedAt: number;
-  paintBlob: Blob; // full-resolution PNG of the (frame 1) paint layer
   /**
-   * Frame 2's paint layer for two-frame images, present only once the child
-   * has visited/painted frame 2. Optional and not part of any index, so old
-   * records need no migration.
+   * Frame 1's ordered paint operations - the source of truth for what's been
+   * painted there. Frame 1's paint canvas is always derivable by replaying
+   * these in order (see `engine/opRenderer.ts`); nothing else needs saving.
    */
-  paintBlob2?: Blob;
-  thumbBlob: Blob; // 256px composite PNG for gallery thumbnails (frame 1)
+  ops1: PaintOp[];
+  /**
+   * Frame 2's OWN ops (two-frame images only) - only ever populated for
+   * regions the child has directly repainted there (see
+   * `frame2OverriddenRegionIds`). Non-overridden regions mirror frame 1's ops
+   * live at render/load time (via `matchFrameRegions` + `transformOp`), so
+   * they're never duplicated into this list.
+   */
+  ops2?: PaintOp[];
+  /**
+   * Stable region ids (from `computeAllRegions`) on frame 2 that the child has
+   * directly repainted there - those regions stop mirroring frame 1's ops.
+   * Absent/old saves are treated as "nothing diverged yet, everything syncs".
+   */
+  frame2OverriddenRegionIds?: number[];
+  thumbBlob: Blob; // 256px composite PNG for gallery thumbnails (frame 1), regenerated at save time
 }
 
 const DB_NAME = 'coloriki';

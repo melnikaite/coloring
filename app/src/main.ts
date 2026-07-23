@@ -1,6 +1,12 @@
 import './style.css';
 import { mountGallery } from './gallery';
 import { mountEditor } from './editor';
+import { initTheme } from './theme';
+
+// Also applied synchronously by an inline script in index.html (before this
+// module even loads) to avoid a flash of the wrong theme; this call covers
+// dev-mode timing and keeps a single source of truth for the read logic.
+initTheme();
 
 const app = document.getElementById('app') as HTMLElement;
 let disposeCurrent: (() => void) | null = null;

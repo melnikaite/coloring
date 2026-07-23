@@ -55,7 +55,7 @@ uv run gen --backend gemma  --subject "a simple house with a triangular roof" --
 
 Flags:
 
-- `--backend banana|gemma` (required)
+- `--backend banana|gemma` (required, unless `--from-png` is used — see below)
 - `--subject "..."` — prompt describing the subject
 - `--id my-id` — catalog id / SVG filename (`<category>/<id>.svg`); lowercase
   letters, digits, hyphens
@@ -95,6 +95,64 @@ A summary (`N succeeded, M failed`) is printed at the end.
 vehicles, characters (described generically, no franchise names),
 funny/absurd subjects, events (birthday, first school day, New Year, weddings,
 and more), and professions.
+
+### Cheaper batches via the Gemini Batch API (`--batch-api`)
+
+```bash
+uv run gen --backend banana --batch prompts/mypack.txt --batch-api
+```
+
+Submits the whole pack as ONE Gemini Batch API job instead of one
+`generateContent` call per item: **~50% cheaper** ($0.0168/image vs
+$0.0336/image for `gemini-3.1-flash-lite-image`, per the official model card
+and pricing page), at the cost of being asynchronous — Google's SLA is up to
+24h, though in testing a 2-item job completed in about 3 minutes.
+
+- Requires `--backend banana` (it's a Gemini-specific endpoint; `gemma` runs
+  locally and has no batch API).
+- The existing pre-checks (bad id, already-in-catalog, duplicate-theme) still
+  run for every line **before** the job is submitted, so nothing wasted on
+  skips.
+- Prints the job id, then polls every 45s with progress output
+  (`succeeded=.../failed=.../pending=... of N`). Safe to Ctrl-C — the job
+  keeps running on Google's side — and re-attach later with:
+  ```bash
+  uv run gen batch-status --job-id <id printed above> --out <same --out as before>
+  ```
+  `batch-status` reads the job's saved state from
+  `generator/cache/batch-jobs/` (no need to re-supply the batch file), so it
+  works even in a fresh terminal or after a reboot, up to Google's ~6-week
+  result retention window.
+- Once the job succeeds, results go through the exact same
+  threshold → vtracer → scour → catalog-upsert tail as every other path.
+- **Use `--batch-api` for large, non-urgent packs** (queue it and check back
+  later); **keep the default synchronous `--batch`** for small or urgent ones
+  (results land immediately, one at a time).
+- One quirk: the Batch API returns JPEG inline data instead of PNG for this
+  model (the code handles it fine — Pillow sniffs the actual format from the
+  bytes — but it's not what you'd expect from the "PNG" naming elsewhere in
+  this pipeline).
+
+## Vectorizing a local PNG (`--from-png`)
+
+Already have a line-art PNG (hand-drawn, scanned, sourced elsewhere) and just
+want it run through the same threshold → vtracer → scour pipeline, with zero
+API cost and no Gemini/gemma call at all?
+
+```bash
+uv run gen --from-png ~/Downloads/my-drawing.png --id my-id --category animals
+```
+
+- `--backend` and `--subject` are not needed (no generation happens). `--id`
+  and `--category` are still required.
+- `--subject`, if you do pass one, is only used as the pseudo-subject text
+  for the duplicate-theme check; without it, `--title` is used, and without
+  that, a title derived from `--id` (e.g. `red-fox` → `"Red Fox"`).
+- Single image only — doesn't combine with `--batch` (that flag is for many
+  *generated* images from text prompts; `--from-png` is inherently one local
+  file at a time).
+- Everything else (`--title`, `--tags`, `--out`, `--force`, `--allow-similar`)
+  works exactly as in normal generation.
 
 ## Animation frames (`gen animate`)
 

@@ -1787,6 +1787,48 @@
         "professions/astronaut.svg",
         "professions/astronaut.f2.svg"
       ]
+    },
+    {
+      "id": "otter",
+      "file": "animals/otter.svg",
+      "title": "Otter",
+      "category": "animals",
+      "tags": {
+        "en": [
+          "otter"
+        ],
+        "ru": [
+          "выдра"
+        ],
+        "de": [
+          "fischotter"
+        ]
+      },
+      "frames": [
+        "animals/otter.svg",
+        "animals/otter.f2.svg"
+      ]
+    },
+    {
+      "id": "kangaroo",
+      "file": "animals/kangaroo.svg",
+      "title": "Kangaroo",
+      "category": "animals",
+      "tags": {
+        "en": [
+          "kangaroo"
+        ],
+        "ru": [
+          "кенгуру"
+        ],
+        "de": [
+          "känguru"
+        ]
+      },
+      "frames": [
+        "animals/kangaroo.svg",
+        "animals/kangaroo.f2.svg"
+      ]
     }
   ]
 }

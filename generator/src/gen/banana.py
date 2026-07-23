@@ -1,4 +1,4 @@
-"""Backend "banana": Gemini 2.5 Flash Image ("nano banana") via the REST API.
+"""Backend "banana": Gemini image generation via the REST API.
 
 We call the REST endpoint directly with httpx instead of the google-genai SDK to
 keep the dependency footprint small. The exact response envelope has shifted
@@ -15,15 +15,18 @@ import httpx
 
 from . import postprocess, svgtools
 
-MODEL = "gemini-2.5-flash-image"
+# gemini-2.5-flash-image ("nano banana") retires 2026-10-02; switched to the
+# cheaper gemini-3.1-flash-lite-image ($0.034/image vs $0.039) ahead of that.
+MODEL = "gemini-3.1-flash-lite-image"
 API_URL = (
     f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
 )
 
 PROMPT_TEMPLATE = (
-    "Black and white line art coloring page for young children. "
-    "Subject: {subject}. Thick smooth black outlines (about 8px), large simple "
-    "closed shapes, no shading, no hatching, no gray tones, no tiny details, "
+    "Black and white line art coloring page for young children, in the style of a "
+    "professional vector illustration. Subject: {subject}. Perfectly smooth, clean, "
+    "continuous black outlines (about 8px), no jagged or rough edges, no pixel noise, "
+    "large simple closed shapes, no shading, no hatching, no gray tones, no tiny details, "
     "pure white background, no frame or border around the image, the whole "
     "subject fits inside the picture with margins."
 )
@@ -45,7 +48,13 @@ def _get_api_key() -> str:
     return api_key
 
 
-def _extract_inline_png(response_json: dict) -> bytes:
+def extract_inline_png(response_json: dict) -> bytes:
+    """Pull the inline image out of a `generateContent`-shaped response dict.
+
+    Shared with `batch_api.py`: each item in a Batch API job's inlined
+    responses has the exact same `{candidates: [...]}` shape as a normal
+    synchronous response, so the same extraction logic applies.
+    """
     candidates = response_json.get("candidates") or []
     if not candidates:
         raise BananaError(
@@ -92,7 +101,7 @@ def _request_image(parts: list[dict], *, timeout: float = 120.0) -> bytes:
     except ValueError as e:
         raise BananaError(f"Gemini API returned non-JSON response: {e}") from e
 
-    return _extract_inline_png(data)
+    return extract_inline_png(data)
 
 
 def generate_image_png(subject: str, *, timeout: float = 120.0) -> bytes:

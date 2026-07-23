@@ -8,10 +8,28 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Coloriki" />
+    <!-- The app has its own light/dark theme (see src/theme.ts + the
+         `prefers-color-scheme`/`data-theme` rules in style.css) - this asks
+         Dark Reader and similar extensions not to also recolor the page,
+         since a second, uncoordinated dynamic recolor breaks the white
+         paper / black line-art contrast coloring pages depend on. -->
+    <meta name="darkreader-lock" />
     <title>Coloriki</title>
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/icons/icon-192.png" />
     <link rel="apple-touch-icon" href="/icons/icon-180.png" />
+    <script>
+      // Applies a saved light/dark theme choice before any CSS/JS loads, to
+      // avoid a flash of the wrong theme. Kept in sync with src/theme.ts,
+      // which is the source of truth for the rest of the app (including the
+      // toggle itself and its "no choice yet = follow the OS" fallback).
+      (function () {
+        try {
+          var t = localStorage.getItem('coloriki.theme');
+          if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>

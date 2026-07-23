@@ -185,9 +185,16 @@ production deploy** (build config in `netlify.toml`: base `app`, publish `dist`)
   the stroke started. Paint lives on a separate canvas under the lines.
 - Saving: autosaved per picture to IndexedDB (paint layer PNG + thumbnail), listed
   under 🎨 "My works". Export: PNG (📤) and animated GIF (🎬, gifenc).
-- Offline: service worker — app shell precached, images cache-first (catalog.json
-  network-first so new packs show up!), per-category ⬇️ download buttons in the
-  gallery fetch whole categories into the cache.
+- Offline: service worker — app shell + the hashed JS/CSS bundle are both precached
+  on install (a build-time manifest tells the SW every hashed filename, so a single
+  online visit is enough — no more "needs two loads" gap), images cache-first
+  (catalog.json network-first so new packs show up!), per-category ⬇️ download
+  buttons in the gallery fetch whole categories into the cache. Network requests
+  time out after 3s and fall back to cache, so a "connected but broken" network
+  (captive wifi, weak signal) doesn't hang the app.
+- Install: since Chrome doesn't reliably prompt on its own, a 📲 button appears in
+  the gallery topbar (via `beforeinstallprompt`, `app/src/installPrompt.ts`) whenever
+  the browser is willing to install the PWA.
 - SVG contract for any hand-made pictures: `viewBox` (any size), closed regions,
   white fill + black outlines ≥8px thick, no text/gradients/scripts, ≤60 KB.
   Drop the file into `app/public/images/<category>/` and add a catalog entry.
